@@ -1,10 +1,13 @@
 "use client";
 
-import { AlertTriangle, TrendingUp, CheckCircle, Tag, RotateCcw } from "lucide-react";
+import { AlertTriangle, TrendingUp, CheckCircle, Tag, RotateCcw, BarChart2 } from "lucide-react";
 import { Card, Badge, ScoreRing, Divider, ProgressBar } from "@/components/ui/index";
 import { Button } from "@/components/ui/Button";
 import { cn, scoreColor, scoreLabel, capitalize } from "@/lib/utils";
 import type { ResumeAnalysis, ResumeIssue, ResumeImprovement } from "@/types";
+import { ResumeRadar } from "@/components/charts/ResumeRadar";
+import { PlacementDonut } from "@/components/charts/PlacementDonut";
+import { SkillHeatmap } from "@/components/charts/SkillHeatmap";
 
 interface ResumeResultsProps {
   analysis: ResumeAnalysis;
@@ -45,7 +48,7 @@ export function ResumeResults({ analysis, onReset }: ResumeResultsProps) {
         </div>
       </Card>
 
-      {/* Score breakdown */}
+      {/* Score breakdown counts */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           { label: "High Issues", value: analysis.mistakes.filter(m => m.severity === "high").length, color: "text-red-400", bg: "bg-red-400/10 border-red-400/15" },
@@ -59,6 +62,44 @@ export function ResumeResults({ analysis, onReset }: ResumeResultsProps) {
           </div>
         ))}
       </div>
+
+      {/* ── Resume Analytics Section ─────────────────────────── */}
+      {(analysis.category_scores || analysis.keywords_missing.length > 0) && (
+        <div className="rounded-xl border border-white/8 bg-coal-800 p-5 space-y-5">
+          <div className="flex items-center gap-2">
+            <BarChart2 className="h-4 w-4 text-amber-400" />
+            <p className="text-sm font-display font-semibold text-white">Resume Analytics</p>
+            <span className="ml-auto text-[10px] font-mono text-zinc-600 uppercase tracking-widest">AI-powered</span>
+          </div>
+
+          {/* Donut + Radar side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+            {/* Overall score donut */}
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest">Overall Score</p>
+              <PlacementDonut score={analysis.score} label="Resume" color="#fbbf24" />
+              <p className="text-xs text-zinc-500 text-center max-w-[160px] leading-relaxed">
+                {analysis.score >= 80 ? "Strong resume — minor polish needed"
+                  : analysis.score >= 60 ? "Decent base — clear room to improve"
+                  : "Needs significant work before applying"}
+              </p>
+            </div>
+
+            {/* Radar chart */}
+            {analysis.category_scores && (
+              <ResumeRadar data={analysis.category_scores} />
+            )}
+          </div>
+
+          {/* Skill gap heatmap — from missing keywords */}
+          {analysis.keywords_missing.length > 0 && (
+            <SkillHeatmap
+              title="Missing Keyword Gaps"
+              skills={analysis.keywords_missing.map(kw => ({ name: kw, level: 15 }))}
+            />
+          )}
+        </div>
+      )}
 
       {/* Two-column layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

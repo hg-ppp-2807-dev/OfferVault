@@ -9,6 +9,11 @@ import {
   Map,
   Zap,
   LayoutDashboard,
+  XCircle,
+  Target,
+  TrendingUp,
+  Code2,
+  BarChart2,
 } from "lucide-react";
 
 const nav = [
@@ -16,6 +21,14 @@ const nav = [
   { href: "/resume", label: "Resume Analyzer", icon: FileText },
   { href: "/interview", label: "Mock Interview", icon: MessageSquare },
   { href: "/roadmap", label: "Roadmap", icon: Map },
+  { href: "/analytics", label: "Analytics", icon: BarChart2 },
+];
+
+const navAdvanced = [
+  { href: "/rejection", label: "Rejection Analyzer", icon: XCircle },
+  { href: "/readiness", label: "Readiness Check", icon: Target },
+  { href: "/predict", label: "Placement Predictor", icon: TrendingUp },
+  { href: "/project", label: "Project Suggester", icon: Code2 },
 ];
 
 export function Sidebar() {
@@ -29,38 +42,73 @@ export function Sidebar() {
           <Zap className="h-4 w-4 text-coal-950" strokeWidth={2.5} />
         </div>
         <span className="font-display text-base font-bold text-white tracking-tight">
-          PlaceCoach
+          OfferVault
         </span>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {nav.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href;
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
-                active
-                  ? "bg-amber-400/10 text-amber-400"
-                  : "text-zinc-500 hover:bg-white/5 hover:text-zinc-200"
-              )}
-            >
-              <Icon
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
+        <div className="space-y-0.5">
+          {nav.map(({ href, label, icon: Icon }) => {
+            const active = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
                 className={cn(
-                  "h-4 w-4 transition-colors",
-                  active ? "text-amber-400" : "text-zinc-600 group-hover:text-zinc-300"
+                  "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                  active
+                    ? "bg-amber-400/10 text-amber-400"
+                    : "text-zinc-500 hover:bg-white/5 hover:text-zinc-200"
                 )}
-              />
-              {label}
-              {active && (
-                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-amber-400" />
-              )}
-            </Link>
-          );
-        })}
+              >
+                <Icon
+                  className={cn(
+                    "h-4 w-4 transition-colors",
+                    active ? "text-amber-400" : "text-zinc-600 group-hover:text-zinc-300"
+                  )}
+                />
+                {label}
+                {active && (
+                  <span className="ml-auto h-1.5 w-1.5 rounded-full bg-amber-400" />
+                )}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Advanced tools */}
+        <div>
+          <p className="px-3 mb-1.5 text-[10px] font-mono uppercase tracking-widest text-zinc-700">Advanced</p>
+          <div className="space-y-0.5">
+            {navAdvanced.map(({ href, label, icon: Icon }) => {
+              const active = pathname === href;
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                    active
+                      ? "bg-violet-400/10 text-violet-400"
+                      : "text-zinc-500 hover:bg-white/5 hover:text-zinc-200"
+                  )}
+                >
+                  <Icon
+                    className={cn(
+                      "h-4 w-4 transition-colors",
+                      active ? "text-violet-400" : "text-zinc-600 group-hover:text-zinc-300"
+                    )}
+                  />
+                  {label}
+                  {active && (
+                    <span className="ml-auto h-1.5 w-1.5 rounded-full bg-violet-400" />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
       </nav>
 
       {/* Footer */}

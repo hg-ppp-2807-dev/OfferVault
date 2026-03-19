@@ -8,11 +8,18 @@ export const maxDuration = 60;
 export const runtime = "nodejs";
 
 const SYSTEM_PROMPT = `You are an expert resume reviewer and career coach with 15+ years of experience in technical recruiting.
-Analyze the provided resume and return a JSON object with this exact structure:
+Analyze the provided resume and return ONLY a JSON object with this exact structure. No markdown, no extra text:
 
 {
   "score": <number 0-100>,
   "summary": "<2-3 sentence overall assessment>",
+  "category_scores": {
+    "content": <0-100>,
+    "ats": <0-100>,
+    "structure": <0-100>,
+    "grammar": <0-100>,
+    "impact": <0-100>
+  },
   "strengths": ["<strength1>", "<strength2>", "<strength3>"],
   "mistakes": [
     {
@@ -31,9 +38,8 @@ Analyze the provided resume and return a JSON object with this exact structure:
     }
   ],
   "keywords_missing": ["<keyword1>", "<keyword2>"]
-}
+}`;
 
-Be specific, honest, and constructive. Return ONLY valid JSON — no markdown, no extra text.`;
 
 export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse<ResumeAnalysis>>> {
   try {

@@ -1,8 +1,17 @@
 // ─── Resume ──────────────────────────────────────────────────────────────────
 
+export interface CategoryScores {
+  content: number;
+  ats: number;
+  structure: number;
+  grammar: number;
+  impact: number;
+}
+
 export interface ResumeAnalysis {
   score: number; // 0–100
   summary: string;
+  category_scores?: CategoryScores;
   mistakes: ResumeIssue[];
   improvements: ResumeImprovement[];
   strengths: string[];
@@ -95,3 +104,45 @@ export interface ApiResponse<T> {
   error?: string;
   success: boolean;
 }
+
+// ─── Rejection Analysis ───────────────────────────────────────────────────────
+
+export interface RejectionAnalysis {
+  rejection_score: number;
+  verdict: string;
+  reasons: string[];
+  missing_skills: string[];
+  red_flags: string[];
+  fix_plan: string[];
+}
+
+// ─── Readiness Evaluation ────────────────────────────────────────────────────
+
+export interface ReadinessResult {
+  readiness_score: number;
+  level: "Not Ready" | "Partially Ready" | "Almost Ready" | "Ready";
+  strengths: string[];
+  weaknesses: string[];
+  next_actions: string[];
+}
+
+// ─── Placement Prediction ────────────────────────────────────────────────────
+
+export interface PredictionResult {
+  placement_chance: "Low" | "Medium" | "High" | "Very High";
+  confidence_level: string;
+  estimated_days: number;
+  risks: string[];
+  actions: string[];
+}
+
+// ─── Project Suggestion ──────────────────────────────────────────────────────
+
+export interface ProjectSuggestion {
+  title: string;
+  description: string;
+  tech_stack: string[];
+  features: string[];
+  impact: string;
+}
+
