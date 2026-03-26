@@ -26,7 +26,7 @@ export function SkillHeatmap({ skills, title = "Skill Gap Analysis" }: SkillHeat
   if (!skills || skills.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-white/8 bg-coal-800 p-4">
+    <div className="surface-card p-4 rounded-xl shadow-md">
       <div className="flex items-center justify-between mb-4">
         <p className="text-xs font-mono text-zinc-500 uppercase tracking-widest">{title}</p>
         <div className="flex items-center gap-3 text-[10px] font-mono text-zinc-600">

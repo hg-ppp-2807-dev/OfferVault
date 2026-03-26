@@ -7,23 +7,21 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
   glow?: "amber" | "violet" | "emerald" | "none";
 }
 
-export function Card({ className, glow = "none", ...props }: CardProps) {
-  const glows = {
-    amber: "hover:shadow-amber-glow hover:border-amber-400/20",
-    violet: "hover:shadow-violet-glow hover:border-violet-400/20",
-    emerald: "hover:shadow-emerald-glow hover:border-emerald-400/20",
-    none: "",
-  };
-
+export function Card({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: "amber" | "violet" | "emerald" }) {
   return (
     <div
-      className={cn(
-        "rounded-xl border border-white/8 bg-coal-800 p-6 transition-all duration-300",
-        glows[glow],
-        className
-      )}
-      {...props}
-    />
+      className={
+        cn(
+          "surface-card rounded-2xl shadow-md",
+          glow === "amber" && "shadow-amber-glow",
+          glow === "violet" && "shadow-violet-glow",
+          glow === "emerald" && "shadow-emerald-glow",
+          className
+        )
+      }
+    >
+      {children}
+    </div>
   );
 }
 
@@ -33,24 +31,11 @@ interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   variant?: "amber" | "emerald" | "violet" | "red" | "zinc";
 }
 
-export function Badge({ className, variant = "zinc", ...props }: BadgeProps) {
-  const variants = {
-    amber: "bg-amber-400/10 text-amber-400 border-amber-400/20",
-    emerald: "bg-emerald-400/10 text-emerald-400 border-emerald-400/20",
-    violet: "bg-violet-400/10 text-violet-400 border-violet-400/20",
-    red: "bg-red-400/10 text-red-400 border-red-400/20",
-    zinc: "bg-white/5 text-zinc-400 border-white/10",
-  };
-
+export function Badge({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium font-mono",
-        variants[variant],
-        className
-      )}
-      {...props}
-    />
+    <span className={cn("inline-flex items-center rounded-full border border-surface bg-card text-card px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider", className)}>
+      {children}
+    </span>
   );
 }
 

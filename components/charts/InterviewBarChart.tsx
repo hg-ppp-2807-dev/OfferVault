@@ -27,7 +27,7 @@ export function InterviewBarChart({ evaluation }: InterviewBarChartProps) {
   ];
 
   return (
-    <div className="rounded-xl border border-violet-400/20 bg-violet-400/5 p-4">
+    <div className="surface-card p-4 rounded-xl shadow-md">
       <p className="text-xs font-mono text-zinc-500 uppercase tracking-widest mb-3">Performance Breakdown</p>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={chartData} barCategoryGap="30%">

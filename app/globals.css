@@ -6,6 +6,47 @@
   --font-syne: "Syne", sans-serif;
   --font-dm-sans: "DM Sans", sans-serif;
   --font-jetbrains: "JetBrains Mono", monospace;
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+/* Theme-aware surfaces */
+.bg-surface {
+  background-color: #fff;
+}
+.dark .bg-surface {
+  background-color: #16161f;
+}
+
+.bg-card {
+  background-color: #f9fafb;
+}
+.dark .bg-card {
+  background-color: #252535;
+}
+
+.text-surface {
+  color: #27272a;
+}
+.dark .text-surface {
+  color: #e4e4e7;
+}
+
+.text-card {
+  color: #27272a;
+}
+.dark .text-card {
+  color: #e4e4e7;
+}
+
+.border-surface {
+  border-color: #e5e7eb;
+}
+.dark .border-surface {
+  border-color: #23232f;
 }
 
 @layer base {
@@ -18,9 +59,14 @@
   }
 
   body {
+    background-color: #fafafa;
+    color: #27272a;
+    font-family: var(--font-dm-sans);
+  }
+
+  .dark body {
     background-color: #0a0a0f;
     color: #e4e4e7;
-    font-family: var(--font-dm-sans);
   }
 
   ::-webkit-scrollbar {
@@ -33,11 +79,19 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(113, 113, 122, 0.35);
     border-radius: 3px;
   }
 
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
   ::-webkit-scrollbar-thumb:hover {
+    background: rgba(113, 113, 122, 0.5);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.15);
   }
 
@@ -65,6 +119,14 @@
   .bg-coal-800 { background-color: #16161f; }
   .bg-coal-700 { background-color: #1e1e2a; }
   .bg-coal-600 { background-color: #252535; }
+
+  .surface-card {
+    @apply border border-zinc-200 bg-white text-zinc-800;
+  }
+
+  .dark .surface-card {
+    @apply border-white/10 bg-coal-800 text-zinc-200;
+  }
 
   .border-white\/8 { border-color: rgba(255, 255, 255, 0.08); }
   .border-white\/5 { border-color: rgba(255, 255, 255, 0.05); }
@@ -100,7 +162,13 @@
 /* Grid background for hero areas */
 .bg-grid {
   background-image:
+    linear-gradient(rgba(113, 113, 122, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(113, 113, 122, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.dark .bg-grid {
+  background-image:
     linear-gradient(rgba(251, 191, 36, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(251, 191, 36, 0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
 }

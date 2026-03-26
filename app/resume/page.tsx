@@ -42,38 +42,41 @@ export default function ResumePage() {
   const reset = () => setResult(null);
 
   return (
-    <div className="space-y-8">
-      {/* Page header */}
-      <div>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-400/10 border border-amber-400/20">
-            <FileText className="h-4.5 w-4.5 text-amber-400" />
+    <div className="surface-card p-8 rounded-2xl shadow-md">
+      <div className="space-y-8">
+        {/* Page header */}
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-400/10 border border-amber-400/20">
+              <FileText className="h-4.5 w-4.5 text-amber-400" />
+            </div>
+            <h1 className="font-display text-2xl font-bold text-zinc-900 dark:text-white mb-4">
+              Resume Analyzer
+            </h1>
           </div>
-          <h1 className="font-display text-2xl font-bold text-white">Resume Analyzer</h1>
+          <p className="text-zinc-400 text-sm pl-12">
+            Upload your PDF resume for an AI-powered audit — score, mistakes, and
+            improvements.
+          </p>
         </div>
-        <p className="text-zinc-400 text-sm pl-12">
-          Upload your PDF resume for an AI-powered audit — score, mistakes, and improvements.
-        </p>
+
+        {/* Upload (only shown when no result) */}
+        {!result && !loading && (
+          <Card>
+            <ResumeUploader
+              onResult={setResult}
+              onLoading={setLoading}
+              loading={loading}
+            />
+          </Card>
+        )}
+
+        {/* Loading state */}
+        {loading && <LoadingSkeleton />}
+
+        {/* Results */}
+        {result && !loading && <ResumeResults analysis={result} onReset={reset} />}
       </div>
-
-      {/* Upload (only shown when no result) */}
-      {!result && !loading && (
-        <Card>
-          <ResumeUploader
-            onResult={setResult}
-            onLoading={setLoading}
-            loading={loading}
-          />
-        </Card>
-      )}
-
-      {/* Loading state */}
-      {loading && <LoadingSkeleton />}
-
-      {/* Results */}
-      {result && !loading && (
-        <ResumeResults analysis={result} onReset={reset} />
-      )}
     </div>
   );
 }

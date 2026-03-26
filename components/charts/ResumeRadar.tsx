@@ -25,7 +25,7 @@ export function ResumeRadar({ data }: ResumeRadarProps) {
   ];
 
   return (
-    <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4">
+    <div className="surface-card p-4 rounded-xl shadow-md">
       <p className="text-xs font-mono text-zinc-500 uppercase tracking-widest mb-3">Category Breakdown</p>
       <ResponsiveContainer width="100%" height={240}>
         <RadarChart data={chartData}>
