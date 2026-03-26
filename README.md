@@ -1,6 +1,6 @@
 # 🎯 PlaceCoach — AI Placement Coach MVP
 
-A production-ready AI placement coach designed to help users prepare for job placements efficiently.
+An AI placement coach designed to help users prepare for job placements efficiently.
 
 ---
 
@@ -25,5 +25,5 @@ PlaceCoach provides an AI-driven, comprehensive approach to solve these placemen
 
 - **Framework:** Next.js 14
 - **AI Engine:** ollama (llama3.2)
-- **Database:** Supabase (PostgreSQL)
+- **Database:** MongoDB
 - **Styling & UI:** Tailwind CSS
