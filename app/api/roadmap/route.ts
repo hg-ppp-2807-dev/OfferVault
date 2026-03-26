@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { groqJSON } from "@/lib/groq";
-import { saveRoadmap } from "@/lib/supabase";
+import { saveRoadmap } from "@/lib/mongodb";
 import type { RoadmapInput, Roadmap, ApiResponse } from "@/types";
 
 export const maxDuration = 60;

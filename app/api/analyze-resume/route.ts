@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { groqJSON } from "@/lib/groq";
+import { callOllama } from "@/lib/ollama";
 import { extractTextFromPDF, fileToBuffer, wordCount } from "@/lib/pdf-utils";
-import { saveResumeAnalysis } from "@/lib/supabase";
+import { saveResumeAnalysis } from "@/lib/mongodb";
 import type { ResumeAnalysis, ApiResponse } from "@/types";
 
 export const maxDuration = 60;
@@ -79,16 +79,20 @@ export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse<R
     }
 
     // Call Ollama
-    const analysis = await groqJSON<ResumeAnalysis>(
-      [
-        { role: "system", content: SYSTEM_PROMPT },
-        {
-          role: "user",
-          content: `Please analyze this resume:\n\n---\n${resumeText.slice(0, 6000)}\n---`,
-        },
-      ],
-      { temperature: 0.3, max_tokens: 3000 }
+    const ollamaResponse = await callOllama(
+      `${SYSTEM_PROMPT}\n\nPlease analyze this resume:\n\n---\n${resumeText.slice(0, 6000)}\n---`,
+      { temperature: 0.3, num_predict: 3000 }
     );
+
+    let analysis: ResumeAnalysis;
+    try {
+      analysis = JSON.parse(ollamaResponse);
+    } catch (e) {
+      return NextResponse.json(
+        { success: false, error: "Failed to parse analysis response." },
+        { status: 500 }
+      );
+    }
 
     // Persist to Supabase (fire-and-forget)
     saveResumeAnalysis({

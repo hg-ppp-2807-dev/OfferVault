@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { groqChat, groqJSON } from "@/lib/groq";
-import { saveInterviewSession } from "@/lib/supabase";
+import { callOllama } from "@/lib/ollama";
+import { saveInterviewSession } from "@/lib/mongodb";
 import type { InterviewMessage, InterviewEvaluation, ApiResponse } from "@/types";
 
 export const maxDuration = 60;
@@ -61,25 +61,22 @@ export async function POST(
       })),
     ];
 
-    const response = await groqChat(groqMessages, { temperature: 0.7 });
+    // If interview is complete, evaluate
+    if (totalAnswered >= TOTAL_QUESTIONS) {
+      // Call Ollama for evaluation
+      const transcript = messages.map((m) => `${m.role}: ${m.content}`).join("\n");
+      const evalPrompt = `${EVALUATION_PROMPT}\n\n${transcript}`;
+      const evalResponse = await callOllama(evalPrompt);
+      let evaluation: InterviewEvaluation | undefined = undefined;
+      try {
+        evaluation = JSON.parse(evalResponse);
+      } catch (e) {
+        return NextResponse.json({ success: false, error: "Failed to parse evaluation." }, { status: 500 });
+      }
 
-    // Check if interview is complete
-    if (response.includes("INTERVIEW_COMPLETE") || totalAnswered >= TOTAL_QUESTIONS) {
-      // Generate evaluation
-      const transcript = messages
-        .map((m) => `${m.role === "assistant" ? "Interviewer" : "Candidate"}: ${m.content}`)
-        .join("\n\n");
-
-      const evaluation = await groqJSON<InterviewEvaluation>(
-        [
-          { role: "system", content: EVALUATION_PROMPT },
-          {
-            role: "user",
-            content: `Role: ${role}\n\nInterview Transcript:\n\n${transcript}`,
-          },
-        ],
-        { temperature: 0.3 }
-      );
+      if (!evaluation) {
+        return NextResponse.json({ success: false, error: "Evaluation is missing." }, { status: 500 });
+      }
 
       // Persist session
       saveInterviewSession({
@@ -98,6 +95,11 @@ export async function POST(
         },
       });
     }
+
+    // Call Ollama with the constructed messages
+    // Convert groqMessages to a single prompt string
+    const prompt = groqMessages.map((m) => `${m.role}: ${m.content}`).join("\n");
+    const response = await callOllama(prompt);
 
     return NextResponse.json({
       success: true,

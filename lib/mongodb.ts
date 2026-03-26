@@ -38,10 +38,7 @@ export async function saveResumeAnalysis(data: object) {
 export async function saveInterviewSession(data: object) {
   try {
     const db = await getDb();
-    await db.collection("interview_sessions").insertOne({
-      ...data,
-      created_at: new Date(),
-    });
+    await db.collection("interview_sessions").insertOne(data);
   } catch (error) {
     console.error("[mongodb] saveInterviewSession error:", error);
   }
